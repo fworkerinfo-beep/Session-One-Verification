@@ -1,852 +1,1253 @@
-<!-- --- START OF FILE User_Panel_Final_Pro.html --- -->
-
+<!-- START OF FILE Session One Updated User V5.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Fworker Premium App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fworker Session One</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
     <style>
         :root {
-            --primary: #FFD700; /* Gold */
-            --primary-dark: #C5A000;
-            --bg: #F0F2F5;
-            --card-bg: #FFFFFF;
-            --text-main: #1F2937;
-            --text-sec: #6B7280;
-            --border: #E5E7EB;
-            --shadow: 0 8px 24px rgba(0,0,0,0.08);
-            --radius: 20px;
+            --primary: #FFD700;
+            --primary-dark: #b8860b;
+            --dark: #121212;
+            --bg: #eff3f6;
+            --text: #333333;
+            --card-bg: #ffffff;
+            --shadow-out: 6px 6px 12px #c5c9cc, -6px -6px 12px #ffffff;
+            --shadow-in: inset 6px 6px 12px #c5c9cc, inset -6px -6px 12px #ffffff;
+            --glass: rgba(255, 255, 255, 0.7);
         }
 
-        /* Dark Mode Variables */
-        body.dark-mode {
-            --bg: #111827;
-            --card-bg: #1F2937;
-            --text-main: #F9FAFB;
-            --text-sec: #9CA3AF;
-            --border: #374151;
-            --shadow: 0 8px 24px rgba(0,0,0,0.4);
+        body.dark-mode { 
+            --bg: #1a1a1a; 
+            --text: #E0E0E0; 
+            --card-bg: #242424;
+            --shadow-out: 5px 5px 10px #0f0f0f, -5px -5px 10px #2f2f2f;
+            --shadow-in: inset 5px 5px 10px #0f0f0f, inset -5px -5px 10px #2f2f2f;
+            --glass: rgba(30, 30, 30, 0.8);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text-main); padding-bottom: 90px; min-height: 100vh; transition: background 0.3s, color 0.3s; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Hind Siliguri', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 80px; transition: 0.3s; }
 
-        /* Animations */
-        @keyframes fadeIn { from{opacity:0; transform: translateY(10px);} to{opacity:1; transform: translateY(0);} }
-        .animate-up { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-
-        /* Loading Screen */
-        #loading-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg); z-index: 6000; display: flex;
-            flex-direction: column; justify-content: center; align-items: center;
+        .header {
+            background: var(--card-bg); color: var(--primary); padding: 15px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 100; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
         }
+        .brand-area { display: flex; align-items: center; gap: 10px; }
+        .app-logo-img { height: 35px; width: auto; border-radius: 8px; display: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .header h2 { font-size: 1.4rem; margin: 0; display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text); }
+        .header h2 i { color: var(--primary); }
 
-        /* Auth Screen */
-        .full-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg); z-index: 2000; display: flex;
-            flex-direction: column; justify-content: center; align-items: center; padding: 25px; overflow-y: auto;
+        .head-icons { position: relative; }
+        .settings-btn { 
+            font-size: 1.4rem; cursor: pointer; color: var(--text); 
+            width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-out); transition: 0.3s;
         }
-        .auth-card {
-            background: var(--card-bg); width: 100%; max-width: 380px;
-            padding: 30px; border-radius: 24px; box-shadow: var(--shadow);
-            text-align: center; border: 1px solid var(--border); margin-bottom: 20px;
-        }
-        /* Auth Logo */
-        .auth-logo-img { max-width: 140px; max-height: 80px; object-fit: contain; margin-bottom: 15px; display: block; margin: 0 auto 15px; }
-
-        .input-group { position: relative; margin-bottom: 15px; }
-        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-sec); font-size: 1rem; }
-        .form-control {
-            width: 100%; padding: 14px 14px 14px 45px; border: 1px solid var(--border);
-            border-radius: 12px; background: var(--bg); color: var(--text-main); outline: none; font-size: 0.95rem;
-        }
-        .form-control:focus { border-color: var(--primary); border-width: 1px; box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2); }
-
-        /* Buttons */
-        .btn {
-            width: 100%; padding: 14px; border: none; border-radius: 14px;
-            background: linear-gradient(135deg, #FFD700, #FDB931);
-            color: #000; font-weight: 700; font-size: 1rem; cursor: pointer; 
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4); transition: all 0.3s ease;
-            position: relative; overflow: hidden; margin-top: 10px;
-        }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5); }
-        .btn:active { transform: translateY(1px); }
-
-        .btn-create-link { display: block; width: 100%; text-align: right; font-size: 0.85rem; color: #3B82F6; font-weight: 600; background: none; border: none; cursor: pointer; margin-top: -10px; margin-bottom: 15px; }
-        .link-text { margin-top: 15px; font-size: 0.9rem; color: var(--text-sec); cursor: pointer; }
-        .link-text span { color: var(--primary-dark); font-weight: 600; }
+        .settings-btn:active { box-shadow: var(--shadow-in); transform: scale(0.95); }
         
-        /* Header & Profile */
-        .app-header {
-            background: var(--card-bg); padding: 25px 20px; border-radius: 0 0 35px 35px;
-            box-shadow: var(--shadow); position: relative; margin-bottom: 25px;
+        .dropdown-menu {
+            position: absolute; top: 50px; right: 0; width: 180px;
+            background: var(--card-bg); border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2); padding: 10px;
+            display: none; z-index: 200; border: 1px solid rgba(0,0,0,0.1);
         }
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        
-        /* NEW LOGO STYLE - Main App Header */
-        .app-main-logo {
-            height: 50px; /* লোগোর সাইজ এখান থেকে কন্ট্রোল করবেন */
-            width: auto;
-            max-width: 180px;
-            object-fit: contain;
-            display: block;
+        .dropdown-menu.show { display: block; animation: fadeIn 0.3s; }
+        .menu-item {
+            padding: 12px; display: flex; align-items: center; gap: 10px;
+            border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text);
+            transition: 0.2s;
         }
+        .menu-item:hover { background: rgba(0,0,0,0.05); }
+        .menu-item i { width: 20px; text-align: center; }
 
-        .header-icons i { font-size: 1.5rem; cursor: pointer; margin-left: 18px; color: var(--text-main); transition: 0.2s; }
-        
-        .profile-container { display: flex; align-items: center; gap: 15px; }
-        .profile-pic {
-            width: 75px; height: 75px; border-radius: 50%; object-fit: cover;
-            border: 3px solid var(--primary); padding: 2px; background: var(--card-bg);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        /* Bottom Navigation Bar (Mobile Design) */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: var(--card-bg); height: 70px; display: flex;
+            justify-content: space-around; align-items: center;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 99;
+            border-top-left-radius: 20px; border-top-right-radius: 20px;
         }
-        .user-details h2 { font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 5px; margin-bottom: 2px; }
-        .verified { color: #3B82F6; font-size: 0.95rem; }
-        .user-meta { font-size: 0.85rem; color: var(--text-sec); display: flex; flex-direction: column; gap: 2px; }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            color: #999; font-size: 0.8rem; cursor: pointer; transition: 0.3s;
+        }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
+        .nav-item.active { color: var(--primary-dark); transform: translateY(-5px); }
+        .nav-item.active i { color: var(--primary); filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2)); }
 
-        /* Components */
-        .section-title { font-size: 1.1rem; font-weight: 700; margin: 25px 0 12px; padding: 0 5px; display: flex; align-items: center; gap: 10px; color: var(--text-main); }
-        .card {
-            background: var(--card-bg); padding: 18px; border-radius: var(--radius);
-            box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 18px; transition: 0.3s;
+        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+
+        .slider-container {
+            width: 100%; aspect-ratio: 16/9; border-radius: 15px; overflow: hidden;
+            position: relative; margin-bottom: 15px; 
+            box-shadow: var(--shadow-out); border: 2px solid var(--card-bg);
         }
+        .slider-wrapper { display: flex; transition: transform 0.5s ease-in-out; height: 100%; width: 100%; }
+        .slide { min-width: 100%; height: 100%; display: block; }
+        .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        .marquee-container {
+            background: var(--card-bg); color: var(--text); padding: 10px 0; border-radius: 50px;
+            overflow: hidden; white-space: nowrap; margin-bottom: 25px; 
+            box-shadow: var(--shadow-in);
+        }
+        .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 20s linear infinite; font-size: 0.9rem; font-weight: 600; color: var(--primary-dark); }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+
         .mobile-ad-container {
-            width: 100%; max-width: 340px; margin: 15px auto;
-            background: #ffffff; border: 1px solid #e0e0e0; border-radius: 10px;
-            padding: 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            display: flex; justify-content: center; align-items: center; overflow: hidden; min-height: 60px;
+            width: 100%; max-width: 340px; margin: 15px auto; background: var(--card-bg);
+            border-radius: 10px; padding: 5px;
+            box-shadow: var(--shadow-out); display: flex;
+            justify-content: center; align-items: center; overflow: hidden; min-height: 60px;
         }
-        
-        .notice-container {
-            background: var(--card-bg); border-radius: 12px; padding: 12px;
-            box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 18px;
-            position: relative; overflow: hidden;
-        }
-        .notice-badge {
-            font-size: 0.7rem; font-weight: 700; background: var(--primary); color: #000;
-            padding: 3px 10px; border-radius: 6px; text-transform: uppercase;
-            display: inline-block; margin-bottom: 5px;
-        }
-        .marquee { white-space: nowrap; animation: scroll 15s linear infinite; font-size: 0.95rem; color: var(--text-main); }
-        @keyframes scroll { 0% {transform: translateX(100%);} 100% {transform: translateX(-100%);} }
 
-        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-        .social-item {
+        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+        .grid-btn {
+            background: var(--card-bg);
+            padding: 15px 5px; border-radius: 16px; text-align: center;
+            box-shadow: var(--shadow-out); cursor: pointer; height: 115px; 
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: var(--bg); padding: 15px 5px; border-radius: 16px; text-decoration: none;
-            color: var(--text-main); font-size: 0.8rem; font-weight: 600;
+            transition: transform 0.2s; position: relative; overflow: hidden;
+            border: 1px solid transparent;
         }
-        .social-item i { font-size: 1.6rem; margin-bottom: 8px; }
+        .grid-btn:active { box-shadow: var(--shadow-in); transform: scale(0.95); }
+        .grid-btn i { font-size: 2rem; color: var(--primary-dark); margin-bottom: 12px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2)); }
+        .grid-btn span { font-size: 0.85rem; font-weight: 600; line-height: 1.3; color: var(--text); }
 
-        /* Sessions */
-        .session-card {
-            background: linear-gradient(135deg, #1F2937, #000); color: #fff;
-            padding: 22px; border-radius: var(--radius); margin-bottom: 15px;
-            display: flex; justify-content: space-between; align-items: center;
-            position: relative; overflow: hidden; cursor: pointer; transition: 0.3s;
+        .btn-roadmap {
+            width: 100%; padding: 15px; background: linear-gradient(135deg, #00C9FF, #92FE9D);
+            color: #005f5f; border: none; border-radius: 12px; font-weight: 700; margin-bottom: 25px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 4px 15px rgba(0, 201, 255, 0.3); font-size: 1rem; text-transform: uppercase;
+        }
+
+        .work-zone {
+            background: var(--card-bg); padding: 20px; border-radius: 18px;
+            box-shadow: var(--shadow-out); position: relative; overflow: hidden; margin-bottom: 20px;
+        }
+        .work-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: var(--text); }
+        .work-desc { font-size: 0.85rem; color: #666; margin-bottom: 20px; line-height: 1.5; }
+        body.dark-mode .work-desc { color: #aaa; }
+        
+        .work-buttons { display: flex; flex-direction: column; gap: 15px; }
+        .btn-work {
+            padding: 15px; background: var(--bg);
+            border-radius: 10px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: var(--shadow-out); transition: 0.3s; color: var(--text);
+        }
+        .btn-work:hover { transform: translateX(5px); }
+        .btn-work:active { box-shadow: var(--shadow-in); }
+
+        .form-box { background: var(--card-bg); padding: 25px; border-radius: 20px; margin-bottom: 20px; box-shadow: var(--shadow-out); }
+        .input { 
+            width: 100%; padding: 14px; border: none; border-radius: 10px; 
+            margin-bottom: 12px; outline: none; background: var(--bg); 
+            box-shadow: var(--shadow-in);
+            color: var(--text); font-size: 0.95rem; transition: 0.3s;
+        }
+        .input:focus { border: 1px solid var(--primary); }
+        
+        .btn-main { 
+            width: 100%; padding: 15px; background: var(--primary); color: #000; 
+            border: none; border-radius: 12px; font-weight: bold; cursor: pointer; 
+            font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.2s;
+        }
+        .btn-main:active { transform: scale(0.98); box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
+
+        .admin-info-box { background: rgba(255, 215, 0, 0.05); border: 2px dashed var(--primary); padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .admin-desc { font-size: 0.85rem; margin-bottom: 10px; color: var(--text); line-height: 1.5; white-space: pre-wrap; }
+        .copy-area { display: flex; align-items: center; justify-content: space-between; background: var(--bg); padding: 10px; border-radius: 8px; box-shadow: var(--shadow-in); }
+        .copy-txt { font-weight: bold; font-family: monospace; font-size: 1.1rem; color: var(--primary-dark); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .btn-copy { background: #333; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; margin-left: 10px; }
+
+        .btn-link-gen {
+            width: 100%; padding: 12px; background: #17a2b8; color: white; 
+            border: none; border-radius: 8px; font-weight: 600; cursor: pointer; 
+            font-size: 0.9rem; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 10px rgba(23, 162, 184, 0.3);
+        }
+
+        .hist-item { 
+            background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 15px; 
+            border-left: 5px solid #ccc; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: flex-start;
+            box-shadow: var(--shadow-out); position: relative;
+        }
+        .st-pending { border-color: orange; color: orange; }
+        .st-approved { border-color: green; color: green; }
+        .st-rejected { border-color: red; color: red; }
+        .reason-box { font-size: 0.75rem; color: #ff4444; margin-top: 5px; background: rgba(255,0,0,0.05); padding: 5px; border-radius: 5px; display: block; width: 100%; }
+        
+        .btn-del-req {
+            background: #ff4444; color: white; border: none; padding: 5px 12px; border-radius: 6px; 
+            font-size: 0.75rem; cursor: pointer; margin-left: 10px; font-weight: bold;
+            box-shadow: 0 2px 5px rgba(255, 68, 68, 0.3);
+        }
+
+        .roadmap-desc-box {
+            background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 20px; 
+            border-radius: 15px; margin-bottom: 20px; text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        .session-card::after {
-            content: ''; position: absolute; right: -20px; bottom: -20px;
-            width: 90px; height: 90px; background: var(--primary); opacity: 0.15; border-radius: 50%;
+        .roadmap-item {
+            background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: var(--shadow-out);
         }
-        .session-info h3 { margin-bottom: 5px; font-size: 1.2rem; }
-        .session-earn { font-size: 0.9rem; color: var(--primary); font-weight: 600; background: rgba(255, 215, 0, 0.15); padding: 4px 10px; border-radius: 8px; display: inline-block; }
-        .play-icon { font-size: 2.2rem; color: var(--primary); z-index: 2; }
-
-        .rules-content {
-            font-size: 0.9rem; line-height: 1.6; color: var(--text-main);
-            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-        }
-        .rules-content.expanded { -webkit-line-clamp: unset; overflow: visible; }
-        .see-more-btn {
-            display: block; width: 100%; text-align: center; margin-top: 12px;
-            color: var(--primary-dark); font-size: 0.9rem; font-weight: 600;
-            cursor: pointer; padding: 8px; background: var(--bg); border-radius: 10px;
+        .badge { padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; background: var(--bg); color: #555; box-shadow: var(--shadow-in); }
+        .badge.done { background: green; color: white; box-shadow: none; }
+        .btn-action-small {
+            background: var(--primary); color: black; border: none; padding: 5px 12px; 
+            border-radius: 50px; font-size: 0.7rem; font-weight: bold; cursor: pointer;
+            margin-left: 10px; display: inline-flex; align-items: center; gap: 5px;
         }
 
-        .support-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .admin-card {
-            background: var(--card-bg); border: 1px solid var(--border);
-            padding: 18px; border-radius: 18px; text-align: center;
-            box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center;
-        }
-        .admin-pic { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); margin-bottom: 10px; }
-        .admin-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 12px; color: var(--text-main); }
-        .contact-btns { display: flex; gap: 10px; width: 100%; justify-content: center; }
-        .c-btn {
-            flex: 1; padding: 8px; border-radius: 10px; border: none; color: white;
-            font-size: 1.1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; text-decoration: none;
+        .session2-area { margin-top: 20px; padding: 20px; background: rgba(0,255,0,0.05); border: 2px dashed green; border-radius: 15px; display: none; text-align: center; }
+        
+        .support-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .contact-btn {
+            display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px;
+            border-radius: 8px; color: white; text-decoration: none; font-weight: bold; font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
         .btn-wa { background: #25D366; }
         .btn-tg { background: #0088cc; }
 
-        /* === IMPORTANT: SCROLL FIX FOR SESSION OVERLAY === */
-        .full-page-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg); z-index: 4000; 
-            display: none; 
-            flex-direction: column; /* Use Flexbox to manage height */
-            overflow: hidden; /* Main container doesn't scroll, inner does */
-        }
-        .full-page-header {
-            background: var(--card-bg); padding: 0 15px;
-            box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between;
-            position: relative; z-index: 10; height: 60px; flex-shrink: 0;
-        }
+        .page { display: none; animation: fadeIn 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from{opacity:0; transform:translateY(15px);} to{opacity:1; transform:translateY(0);} }
         
-        /* This container takes all remaining space */
-        .html-container {
-            width: 100%; 
-            flex: 1; /* Fills remaining height */
-            position: relative;
-            background: #ffffff;
-            overflow-y: hidden; /* Let iframe handle scroll */
-        }
-        /* Iframe settings for proper scrolling */
-        .html-frame { 
-            width: 100%; 
-            height: 100%; 
-            border: none; 
-            display: block;
-        }
-
-        /* Floating Start Button */
-        #btn-start-task {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; z-index: 4002;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            /* Ensure it doesn't block clicks when hidden */
-            display: none; 
-        }
-
-        /* Modals & Bottom Nav */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 75px;
-            background: var(--card-bg); border-top: 1px solid var(--border);
-            display: flex; justify-content: space-around; align-items: center; z-index: 1000;
-            border-radius: 25px 25px 0 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-        }
-        .nav-item { text-align: center; color: var(--text-sec); font-size: 0.8rem; cursor: pointer; }
-        .nav-item i { font-size: 1.5rem; margin-bottom: 5px; display: block; }
-        .nav-item.active { color: var(--primary-dark); }
+        .dynamic-content { padding: 20px; background: var(--card-bg); border-radius: 15px; min-height: 200px; line-height: 1.6; box-shadow: var(--shadow-out); }
         
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 3000; padding: 20px; overflow-y: auto; justify-content: center; align-items: center;
-        }
-        .modal-content-box {
-            background: var(--card-bg); width: 100%; max-width: 400px; 
-            border-radius: 24px; padding: 25px; position: relative; margin: auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3); border: 1px solid var(--border);
-        }
-        
-        .credential-box { background: var(--bg); border: 1px dashed var(--primary); border-radius: 14px; padding: 15px; margin-top: 15px; }
-        .cred-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.9rem; }
-        .cred-val { font-family: monospace; font-weight: 600; background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 4px; }
-        .cred-icon { cursor: pointer; padding: 5px; color: var(--primary-dark); }
-
-        .entry-modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 5000; display: none;
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.6); z-index: 200; display: none;
             justify-content: center; align-items: center; padding: 20px;
         }
-        .entry-box {
-            background: var(--card-bg); width: 100%; max-width: 380px;
-            border-radius: 20px; padding: 20px; text-align: center; position: relative;
-            animation: popIn 0.4s ease; border: 1px solid var(--primary);
-        }
-        .entry-banner { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border); }
-        .entry-btns { display: flex; gap: 10px; margin-bottom: 15px; }
-        .entry-btn {
-            flex: 1; padding: 12px; border-radius: 10px; text-decoration: none;
-            font-size: 0.85rem; font-weight: 600; color: white; display: flex;
-            align-items: center; justify-content: center; gap: 5px; transition: 0.2s;
-        }
+        .modal { background: var(--card-bg); padding: 20px; border-radius: 15px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); color: var(--text); }
+        .modal h3 { margin-bottom: 15px; color: var(--primary-dark); }
+        .close-modal { float: right; cursor: pointer; font-size: 1.2rem; }
 
-        .hide { display: none !important; }
-        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 26px; }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--primary); }
-        input:checked + .slider:before { transform: translateX(24px); }
+        .status-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 1000; display: none;
+            flex-direction: column; justify-content: center; align-items: center;
+            padding: 30px; text-align: center; overflow-y: auto;
+        }
+        .status-icon { font-size: 4rem; margin-bottom: 20px; color: var(--primary); filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2)); }
+        .status-title { font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; color: var(--text); }
+        .status-msg { font-size: 0.95rem; color: #666; margin-bottom: 30px; line-height: 1.6; }
 
     </style>
 </head>
 <body>
 
-    <!-- === 0. AUTO LOGIN LOADING SCREEN === -->
-    <div id="loading-screen" class="full-screen" style="z-index: 6000; background: var(--bg);">
-        <i class="fas fa-circle-notch fa-spin" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
-        <h3 style="color: var(--text-main);">Auto Login...</h3>
-        <p style="color: var(--text-sec); font-size: 0.9rem;">Please wait...</p>
-    </div>
-
-    <!-- === 1. ENTRY POPUP === -->
-    <div id="entry-popup" class="entry-modal-overlay">
-        <div class="entry-box">
-            <img id="entry-banner-img" src="https://via.placeholder.com/300x150" class="entry-banner">
-            <h3 id="entry-title" style="margin-bottom:10px;">Welcome</h3>
-            <p id="entry-desc" style="color:var(--text-sec); font-size:0.9rem; margin-bottom:20px;">Join our channels for updates.</p>
-            <div class="entry-btns">
-                <a id="btn-join-tg" href="#" target="_blank" class="entry-btn" style="background:#0088cc;"><i class="fab fa-telegram-plane"></i> Telegram</a>
-                <a id="btn-join-pay" href="#" target="_blank" class="entry-btn" style="background:#10B981;"><i class="fas fa-users"></i> Pay Group</a>
+    <!-- 0. LOGIN / AUTH SCREEN -->
+    <div id="screen-auth" class="status-screen" style="display:flex;">
+        <i class="fas fa-cube status-icon"></i>
+        <h2 class="status-title">Fworker Session One</h2>
+        <p class="status-msg">আপনার অ্যাকাউন্টে প্রবেশ করতে ইউজারনেম দিন অথবা নতুন অ্যাকাউন্ট খুলুন।</p>
+        
+        <div style="width:100%; max-width:350px;">
+            <div style="background:var(--card-bg); padding:20px; border-radius:15px; box-shadow:var(--shadow-out);">
+                <label style="display:block; text-align:left; font-size:0.8rem; font-weight:bold; margin-bottom:5px;">Username</label>
+                <input id="login-user" class="input" placeholder="Enter Username (e.g. User123)">
+                <button class="btn-main" onclick="handleLogin()">Login</button>
             </div>
-            <button class="btn" onclick="closeEntryPopup()">Check Now</button>
+
+            <div style="margin-top:20px;">
+                <p style="font-size:0.8rem; margin-bottom:10px;">Don't have an account?</p>
+                <button class="btn-main" style="background:transparent; border:2px solid var(--primary); color:var(--text); box-shadow:none;" onclick="startSignup()">Create New Account</button>
+            </div>
         </div>
     </div>
 
-    <!-- === 2. AUTH SCREENS === -->
-    <div id="login-screen" class="full-screen hide">
-        <div class="auth-card animate-up">
-            <!-- Login Logo (Image) -->
-            <img src="https://via.placeholder.com/150" class="auth-logo-img" id="login-logo-img">
+    <!-- 1. SETUP PROFILE OVERLAY -->
+    <div id="screen-setup" class="status-screen">
+        <i class="fas fa-user-circle status-icon"></i>
+        <h2 class="status-title">Profile Setup</h2>
+        <p class="status-msg">প্রথম সেশনের কাজ শুরু করতে অনুগ্রহ করে আপনার সঠিক তথ্য দিয়ে প্রোফাইল সেটআপ করুন।</p>
+        
+        <div style="width:100%; max-width:400px; text-align:left;">
+            <label style="font-size:0.8rem; font-weight:600;">Full Name</label>
+            <input id="su-name" class="input" placeholder="আপনার নাম">
+            <label style="font-size:0.8rem; font-weight:600;">Fworker Gmail</label>
+            <input id="su-gmail" class="input" placeholder="ইমেইল">
+            <label style="font-size:0.8rem; font-weight:600;">Yari ID (UID)</label>
+            <input id="su-yari" class="input" placeholder="ইয়ারি ইউআইডি">
             
-            <p id="login-desc-text" style="color:var(--text-sec); margin-bottom:20px; font-size:0.9rem;">Welcome back! Access your account.</p>
-            <div class="input-group">
-                <i class="fas fa-id-card"></i>
-                <input type="text" id="log-fw" class="form-control" placeholder="Fworker Number">
+            <label style="font-size:0.8rem; font-weight:600;">Profile Image Link</label>
+            <input id="su-img" class="input" placeholder="ছবির লিংক">
+            <div style="text-align:right; margin-top:-10px; margin-bottom:10px;">
+                <span style="font-size:0.8rem; color:#17a2b8; text-decoration:none; font-weight:600; cursor:pointer;" onclick="openGenLink()"><i class="fas fa-link"></i> ইমেজ লিংক তৈরি করুন</span>
             </div>
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="log-pass" class="form-control" placeholder="Password">
-            </div>
-            <button class="btn" onclick="userLogin()">Access Now</button>
-            <div class="link-text" onclick="showRegister()">New User? <span>Create Account</span></div>
-        </div>
-        <div class="auth-footer animate-up" style="text-align:center;">
-            <p style="font-size:0.85rem; color:var(--text-sec);">Please follow our <span style="color:var(--primary-dark); cursor:pointer; font-weight:600;" onclick="showInfo('rules')">Rules</span> before joining.</p>
-        </div>
-    </div>
 
-    <div id="register-screen" class="full-screen hide">
-        <div class="auth-card animate-up">
-             <!-- Register Logo (Image) -->
-            <img src="https://via.placeholder.com/150" class="auth-logo-img" id="reg-logo-img">
+            <label style="font-size:0.8rem; font-weight:600;">WhatsApp Number</label>
+            <input id="su-wa" type="number" class="input" placeholder="হোয়াটসঅ্যাপ নাম্বার">
             
-            <h2 style="margin-bottom:10px;">Join Us</h2>
-            <div class="input-group"><i class="fas fa-user"></i><input id="reg-name" class="form-control" placeholder="Full Name"></div>
-            <div class="input-group"><i class="fas fa-id-card"></i><input id="reg-fw" class="form-control" placeholder="Fworker Number"></div>
-            <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="reg-email" class="form-control" placeholder="Email Address"></div>
-            <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="reg-pass" class="form-control" placeholder="Password"></div>
-            <div class="input-group"><i class="fas fa-wallet"></i><input id="reg-pay" class="form-control" placeholder="Payment Number (Bkash/Nagad)"></div>
-            <div class="input-group" style="margin-bottom:5px;"><i class="fas fa-link"></i><input id="reg-proof" class="form-control" placeholder="Screenshot Link (Proof)"></div>
-            <button class="btn-create-link" onclick="createLink()">Link তৈরি করুন <i class="fas fa-external-link-alt"></i></button>
-            <button class="btn" onclick="userRegister()">Submit Request</button>
-            <div class="link-text" onclick="showLogin()">Already have account? <span>Login</span></div>
+            <label style="font-size:0.8rem; font-weight:600; color:var(--primary-dark);">Fworker Account Number</label>
+            <input id="su-acc" type="number" class="input" placeholder="একাউন্ট নাম্বার (বিকাশ/নগদ)">
+
+            <button class="btn-main" onclick="submitProfileSetup()">Submit Profile</button>
+
+            <div style="margin-top:20px; text-align:center; padding-top:15px; border-top:1px dashed #ccc;">
+                <p style="font-size:0.8rem; color:#666; margin-bottom:5px;">Already have an account?</p>
+                <button class="btn-main" style="background:transparent; border:1px solid #555; color:#333; padding:10px; box-shadow:none;" onclick="cancelSignup()">Login Now</button>
+            </div>
         </div>
     </div>
 
-    <div id="pending-screen" class="full-screen hide">
-        <div class="auth-card animate-up">
-            <i class="fas fa-hourglass-half" style="font-size:3.5rem; color:var(--primary); margin-bottom:20px;"></i>
-            <h2>Approval Pending</h2>
-            <p style="color:var(--text-sec); margin:10px 0; font-size:0.9rem; line-height:1.5;">Your account is currently under review.</p>
-            <button class="btn" onclick="location.reload()">Check Status</button>
-        </div>
+    <!-- 2. PENDING APPROVAL OVERLAY -->
+    <div id="screen-pending" class="status-screen">
+        <i class="fas fa-clock status-icon" style="color:orange;"></i>
+        <h2 class="status-title">Approval Pending</h2>
+        <p class="status-msg">আপনার তথ্য এডমিনের কাছে পাঠানো হয়েছে। এডমিন চেক করে এপ্রুভ করলে আপনি ইউজারনেম পাবেন এবং অ্যাপটি ব্যবহার করতে পারবেন।</p>
+        <button class="btn-main" style="background:#333; color:#fff;" onclick="location.reload()">Check Status</button>
+        <button class="btn-main" style="background:transparent; color:#555; margin-top:10px; box-shadow:none;" onclick="logout()">Logout</button>
     </div>
 
-    <!-- === 3. MAIN APP === -->
-    <div id="main-app" class="hide">
-        <div class="app-header">
-            <div class="header-top">
-                <!-- IMPORTANT: YOUR COMPANY LOGO HERE -->
-                <!-- এই ইমেজের src পরিবর্তন করে আপনার লোগো দিন অথবা এডমিন প্যানেল থেকে config এ সেট করুন -->
-                <img id="app-logo-main" src="https://via.placeholder.com/180x50" class="app-main-logo" alt="Fworker">
+    <!-- 3. BLOCKED / SESSION 2 OVERLAY -->
+    <div id="screen-blocked" class="status-screen">
+        <i class="fas fa-level-up-alt status-icon" style="color:blue;"></i>
+        <h2 class="status-title">Session 02 Started</h2>
+        <p class="status-msg">আপনাকে দ্বিতীয় সেশনে নেওয়া হয়েছে। তাই প্রথম সেশনের এক্সেস আপনার জন্য অফ করা হয়েছে।</p>
+        <button class="btn-main" style="background:transparent; color:#555; margin-top:10px; box-shadow:none;" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- 4. DELETED OVERLAY -->
+    <div id="screen-deleted" class="status-screen">
+        <i class="fas fa-trash-alt status-icon" style="color:red;"></i>
+        <h2 class="status-title">Account Deleted</h2>
+        <p class="status-msg">আপনার একাউন্টটি ডিলিট করা হয়েছে। অনুগ্রহ করে এডমিনের সাথে যোগাযোগ করুন।</p>
+        <button class="btn-main" style="background:transparent; color:#555; margin-top:10px; box-shadow:none;" onclick="logout()">Logout</button>
+    </div>
+
+
+    <!-- MAIN APP WRAPPER -->
+    <div id="main-app" style="display:none;">
+
+        <!-- Header -->
+        <div class="header">
+            <div class="brand-area">
+                <i class="fas fa-arrow-left" id="head-back" onclick="goHome()" style="display:none; font-size:1.2rem; margin-right:5px; cursor:pointer;"></i>
+                <img id="app-logo" class="app-logo-img" src="" alt="Logo">
+                <h2 id="page-title"><i class="fas fa-cube" id="def-icon"></i> Fworker</h2>
+            </div>
+            
+            <div class="head-icons">
+                <div class="settings-btn" onclick="toggleSettingsMenu()">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <!-- Dropdown Menu -->
+                <div id="settings-menu" class="dropdown-menu">
+                    <div class="menu-item" onclick="toggleTheme()">
+                        <i class="fas fa-moon"></i> Dark Mode
+                    </div>
+                    <div class="menu-item" onclick="openSettings()">
+                        <i class="fas fa-user"></i> Profile
+                    </div>
+                    <div class="menu-item" onclick="logout()" style="color:red;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            
+            <!-- 1. HOME PAGE -->
+            <div id="p-home" class="page active">
+                <div class="slider-container"><div class="slider-wrapper" id="slider-wrap"></div></div>
+                <div class="marquee-container"><div class="marquee-text" id="marquee-text">Welcome to Fworker...</div></div>
                 
-                <div class="header-icons">
-                    <i class="fas fa-bell" onclick="showPopup()"></i>
-                    <i class="fas fa-cog" onclick="openSettings()"></i>
+                <div id="ad-zone-home-1" class="mobile-ad-container"></div>
+
+                <div class="main-grid">
+                    <div class="grid-btn" onclick="openService('yari')"><i class="fas fa-coins"></i><span>Yari<br>Sell</span></div>
+                    <div class="grid-btn" onclick="openService('tiktok')"><i class="fab fa-tiktok"></i><span>TikTok<br>Sell</span></div>
+                    <div class="grid-btn" onclick="openService('sm')"><i class="fas fa-crown"></i><span>SM<br>Sell</span></div>
                 </div>
+
+                <button class="btn-roadmap" onclick="openRoadmap()">
+                    <i class="fas fa-map-marked-alt"></i> সেশন ০১ রোডম্যাপ চেক করুন
+                </button>
+
+                <div class="work-zone">
+                    <div class="work-title">
+                        <i class="fas fa-briefcase" style="color:var(--primary);"></i>
+                        কাজ শিখুন এবং কাজ করুন
+                    </div>
+                    <p class="work-desc">
+                        নিচের বাটনগুলো থেকে কাজ শিখুন এবং টাস্ক কমপ্লিট করে আপনার সেশন ০১ এর টার্গেট পূরণ করুন।
+                    </p>
+
+                    <div class="work-buttons">
+                        <div class="btn-work" onclick="openDynamicPage('page_1', 'Yari Coin Work')"><span>১. ইয়ারি কয়েন সেল নিয়ম</span> <i class="fas fa-chevron-right"></i></div>
+                        <div class="btn-work" onclick="openDynamicPage('page_2', 'TikTok Work')"><span>২. টিকটক লাইক ফলো নিয়ম</span> <i class="fas fa-chevron-right"></i></div>
+                        <div class="btn-work" onclick="openDynamicPage('page_3', 'SM Kingdom Work')"><span>৩. এস এম কিংডম নিয়ম</span> <i class="fas fa-chevron-right"></i></div>
+                        <div class="btn-work" onclick="openDynamicPage('page_4', 'Referral System')"><span>৪. রেফারেল করার নিয়ম</span> <i class="fas fa-chevron-right"></i></div>
+                        <div class="btn-work" onclick="openDynamicPage('page_5', 'Daily Tasks')"><span>৫. ডেইলি টাস্ক নিয়ম</span> <i class="fas fa-chevron-right"></i></div>
+                    </div>
+                </div>
+                
+                <div id="ad-zone-home-2" class="mobile-ad-container"></div>
+
+                <div id="home-support-area" style="display:none; margin-top:20px; padding-top:20px; border-top:1px solid #ccc;">
+                    <h4 style="text-align:center; color:var(--text); margin-bottom:10px;">Admin Support</h4>
+                    <div class="support-grid">
+                        <a id="home-btn-wa" href="#" target="_blank" class="contact-btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                        <a id="home-btn-tg" href="#" target="_blank" class="contact-btn btn-tg"><i class="fab fa-telegram"></i> Telegram</a>
+                    </div>
+                </div>
+
             </div>
-            <div class="profile-container">
-                <img id="head-pic" src="https://via.placeholder.com/100" class="profile-pic">
-                <div class="user-details" style="flex:1;">
-                    <h2 id="head-name">User Name <i class="fas fa-check-circle verified"></i></h2>
-                    <div class="user-meta">
-                        <span id="head-email"><i class="fas fa-envelope"></i> email@example.com</span>
-                        <span id="head-phone"><i class="fas fa-phone"></i> +8801700000000</span>
+
+            <!-- 2. SERVICE / COIN SELL PAGE -->
+            <div id="p-work" class="page">
+                <h3 id="service-title" style="text-align:center; color:var(--primary-dark); margin-bottom:20px; font-weight:700;">SERVICE</h3>
+                
+                <div class="form-box">
+                    <button class="btn-link-gen" onclick="openGenLink()">
+                        <i class="fas fa-cloud-upload-alt"></i> ইমেজ লিংক তৈরি করুন
+                    </button>
+
+                    <div class="admin-info-box">
+                        <p id="dyn-pay-desc" class="admin-desc">Loading instructions...</p>
+                        <div style="font-size:0.75rem; color:#666; margin-bottom:5px;">Fworker Number:</div>
+                        <div class="copy-area">
+                            <span id="dyn-pay-addr" class="copy-txt">Loading...</span>
+                            <button class="btn-copy" onclick="copyAddr()"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                    </div>
+                    
+                    <div id="ad-zone-work-top" class="mobile-ad-container"></div>
+
+                    <div id="form-yari" style="display:none;">
+                        <div style="display:flex; gap:10px; margin-bottom:15px;">
+                            <button class="btn-main" id="btn-y-app" onclick="setYariType('app')">আবেদন (Apply)</button>
+                            <button class="btn-main" id="btn-y-sub" style="background:#ddd; color:#333; box-shadow:none;" onclick="setYariType('sub')">জমা (Submit)</button>
+                        </div>
+                        <p id="yari-limit-msg" style="font-size:0.75rem; color:red; margin-bottom:5px;">Loading limits...</p>
+                        <input type="number" id="yari-amt" class="input" placeholder="Amount">
+                        <p id="yari-price" style="color:green; font-weight:bold; margin-bottom:10px;"></p>
+                        
+                        <div id="yari-ss-grp" style="display:none;">
+                            <input id="yari-ss" class="input" placeholder="Screenshot Link (Must Provide Link)">
+                        </div>
+                        <button class="btn-main" onclick="submitCoin('yari')">Confirm Request</button>
+                    </div>
+                    
+                    <div id="ad-zone-work-mid" class="mobile-ad-container"></div>
+
+                    <div id="form-gen" style="display:none;">
+                        <p id="gen-limit-msg" style="font-size:0.75rem; color:red; margin-bottom:5px;">Loading limits...</p>
+                        <input type="number" id="gen-amt" class="input" placeholder="Coin Amount">
+                        <p id="gen-price" style="color:green; font-weight:bold; margin-bottom:10px;"></p>
+                        <input id="gen-ss" class="input" placeholder="Screenshot Link (Must Provide Link)">
+                        <button class="btn-main" onclick="submitCoin('general')">Submit</button>
+                    </div>
+                </div>
+
+                <!-- HISTORY -->
+                <div style="margin-top:25px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--primary); padding-bottom:5px; margin-bottom:15px;">
+                        <h4 style="color:var(--text);"><i class="fas fa-history"></i> <span id="hist-title-plat"></span> History</h4>
+                        <i class="fas fa-sync-alt" onclick="loadHistory()" style="cursor:pointer; color:var(--primary-dark);"> Refresh</i>
+                    </div>
+                    <div id="history-list">Loading...</div>
+                </div>
+                
+                <div id="ad-zone-history" class="mobile-ad-container"></div>
+            </div>
+
+            <!-- 3. DYNAMIC HTML VIEWER PAGE -->
+            <div id="p-dynamic" class="page">
+                <h3 id="dyn-title" style="margin-bottom:15px; color:var(--primary-dark);">Work Details</h3>
+                <div id="dyn-content" class="dynamic-content">
+                    <div style="text-align:center; color:#999;"><i class="fas fa-spinner fa-spin"></i> Loading Content...</div>
+                </div>
+                <div id="ad-zone-dynamic" class="mobile-ad-container"></div>
+            </div>
+
+            <!-- 4. ROADMAP PAGE -->
+            <div id="p-roadmap" class="page">
+                <div class="roadmap-desc-box">
+                    <h3>Session 01 Roadmap</h3>
+                    <p id="rm-desc-text" style="font-size:0.9rem; margin-top:10px; line-height:1.5;">
+                        লোডিং হচ্ছে...
+                    </p>
+                </div>
+                
+                <div id="ad-zone-roadmap" class="mobile-ad-container"></div>
+
+                <div class="card" style="background:var(--card-bg); padding:20px; border-radius:15px; box-shadow:var(--shadow-out);">
+                    <h4 style="margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">আপনার অগ্রগতি (Progress)</h4>
+                    
+                    <div class="roadmap-item">
+                        <span>Yari Coin (Approved)</span>
+                        <span id="rm-yari" class="badge">0 / 0</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span>TikTok Sell (Approved)</span>
+                        <span id="rm-tiktok" class="badge">0 / 0</span>
+                    </div>
+                    <div class="roadmap-item">
+                        <span>SM Sell (Approved)</span>
+                        <span id="rm-sm" class="badge">0 / 0</span>
+                    </div>
+                    
+                    <div class="roadmap-item">
+                        <div style="display:flex; align-items:center;">
+                            Referrals
+                            <button class="btn-action-small" onclick="showModal('ref')"><i class="fas fa-plus"></i> Add</button>
+                        </div>
+                        <span id="rm-ref" class="badge">0 / 0</span>
+                    </div>
+
+                    <div class="roadmap-item">
+                        <div style="display:flex; align-items:center;">
+                            Daily Tasks
+                            <button class="btn-action-small" onclick="showModal('task')"><i class="fas fa-plus"></i> Add</button>
+                        </div>
+                        <span id="rm-task" class="badge">0 / 0</span>
+                    </div>
+                </div>
+
+                <div id="session2-area" class="session2-area">
+                    <h3 style="color:green; text-align:center; margin-bottom:10px;"><i class="fas fa-check-circle"></i> অভিনন্দন!</h3>
+                    <p style="font-size:0.9rem; text-align:center; margin-bottom:15px;">আপনার সেশন ০১ সম্পন্ন হয়েছে। আপনি এখন সেশন ০২ এর জন্য আবেদন করতে পারেন।</p>
+                    
+                    <div style="background:#fff; padding:15px; border-radius:10px; font-size:0.85rem; margin-bottom:15px; border:1px solid #ddd; text-align:left;">
+                        <strong style="color:red;">নিয়মাবলী:</strong>
+                        <p id="rm-terms" style="margin-top:5px; white-space: pre-wrap;">Terms loading...</p>
+                    </div>
+
+                    <label style="display:block; text-align:left; font-size:0.8rem; font-weight:bold;">Your WhatsApp:</label>
+                    <input id="s2-wa-inp" type="number" class="input" placeholder="Active WA Number">
+                    <label style="display:block; text-align:left; font-size:0.8rem; font-weight:bold;">Telegram Username:</label>
+                    <input id="s2-tg-inp" class="input" placeholder="@username">
+                    
+                    <button class="btn-main" onclick="applySession2()">Apply for Session 02</button>
+                    
+                    <div style="margin-top:15px;">
+                        <p style="font-size:0.8rem; margin-bottom:5px;">Contact Admin for help:</p>
+                        <div class="support-grid">
+                            <a id="rm-btn-wa" href="#" target="_blank" class="contact-btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                            <a id="rm-btn-tg" href="#" target="_blank" class="contact-btn btn-tg"><i class="fab fa-telegram"></i> Telegram</a>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- 5. SETTINGS / PROFILE PAGE -->
+            <div id="p-profile" class="page">
+                <div class="form-box">
+                    <h3 style="margin-bottom:20px; color:var(--primary-dark);">Edit Profile</h3>
+                    
+                    <div id="ad-zone-profile" class="mobile-ad-container"></div>
+                    
+                    <label style="font-size:0.8rem; font-weight:600; margin-bottom:5px; display:block;">Yari Profile Image Link</label>
+                    <input id="pf-img" class="input" placeholder="Image URL Paste Here">
+                    
+                    <label style="font-size:0.8rem; font-weight:600; margin-bottom:5px; display:block;">Full Name</label>
+                    <input id="pf-name" class="input" placeholder="Name">
+                    
+                    <label style="font-size:0.8rem; font-weight:600; margin-bottom:5px; display:block;">Fworker Email</label>
+                    <input id="pf-gmail" class="input" placeholder="Email" readonly style="background:#eee;">
+                    
+                    <label style="font-size:0.8rem; font-weight:600; margin-bottom:5px; display:block;">WhatsApp Number</label>
+                    <input id="pf-wa" class="input" placeholder="WhatsApp Number">
+
+                    <label style="font-size:0.8rem; font-weight:600; margin-bottom:5px; display:block; color:var(--primary-dark);">Fworker Account Number</label>
+                    <input id="pf-acc" type="number" class="input" placeholder="Account Number">
+                    
+                    <label style="font-size:0.8rem; font-weight:600; margin-bottom:5px; display:block;">Yari ID (UID)</label>
+                    <input id="pf-id" class="input" placeholder="Yari ID">
+
+                    <label style="font-size:0.8rem; font-weight:600; margin-bottom:5px; display:block;">Username (You can edit this)</label>
+                    <input id="pf-user" class="input" style="font-weight:bold; color:blue; border:1px solid var(--primary);">
+                    
+                    <button class="btn-main" onclick="saveProfile()">Save Changes</button>
+                </div>
+            </div>
+
         </div>
-
-        <div style="padding: 0 20px;">
-            <div class="notice-container">
-                <div class="notice-badge">NOTICE</div>
-                <div class="marquee" id="notice-text">Welcome to Fworker Official App. Stay tuned for updates!</div>
+        
+        <!-- Bottom Nav -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="goHome(); updateNav(this)">
+                <i class="fas fa-home"></i> Home
             </div>
-
-            <div id="ad-zone-1" class="mobile-ad-container"></div>
-
-            <div class="card">
-                <div class="social-grid">
-                    <a id="lnk-fb" href="#" class="social-item"><i class="fab fa-facebook" style="color:#1877F2"></i> Group</a>
-                    <a id="lnk-tg" href="#" class="social-item"><i class="fab fa-telegram" style="color:#0088cc"></i> Channel</a>
-                    <a id="lnk-pay" href="#" class="social-item"><i class="fas fa-receipt" style="color:#10B981"></i> Proof</a>
-                    <a id="lnk-yt" href="#" class="social-item"><i class="fab fa-youtube" style="color:#EF4444"></i> Video</a>
-                </div>
+            <div class="nav-item" onclick="openRoadmap(); updateNav(this)">
+                <i class="fas fa-map-marked-alt"></i> Roadmap
             </div>
-
-            <div id="ad-zone-2" class="mobile-ad-container"></div>
-            <div class="section-title"><i class="fas fa-layer-group" style="color:var(--primary);"></i> Start Working</div>
-            <div id="ad-zone-3" class="mobile-ad-container"></div>
-
-            <div class="session-card" onclick="openFullPageSession(1)">
-                <div class="session-info">
-                    <h3>Session 01</h3>
-                    <div id="sess1-earn" class="session-earn">Loading...</div>
-                </div>
-                <i class="fas fa-play-circle play-icon"></i>
+            <div class="nav-item" onclick="nav('p-work'); updateNav(this)">
+                <i class="fas fa-wallet"></i> Work
             </div>
-            <div id="ad-zone-4" class="mobile-ad-container"></div>
+            <div class="nav-item" onclick="openSettings(); updateNav(this)">
+                <i class="fas fa-user-circle"></i> Profile
+            </div>
+        </div>
+    </div>
+    
+    <div id="input-modal" class="modal-overlay">
+        <div class="modal">
+            <div style="overflow:hidden; margin-bottom:15px;">
+                <h3 id="modal-title" style="float:left; margin:0;">Add Item</h3>
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+            </div>
             
-            <div class="session-card" onclick="openFullPageSession(2)">
-                <div class="session-info">
-                    <h3>Session 02</h3>
-                    <div id="sess2-earn" class="session-earn">Loading...</div>
-                </div>
-                <i class="fas fa-play-circle play-icon"></i>
-            </div>
-            <div id="ad-zone-5" class="mobile-ad-container"></div>
-
-            <div class="session-card" onclick="openFullPageSession(3)">
-                <div class="session-info">
-                    <h3>Session 03</h3>
-                    <div id="sess3-earn" class="session-earn">Loading...</div>
-                </div>
-                <i class="fas fa-play-circle play-icon"></i>
+            <div id="modal-body-ref" style="display:none;">
+                <input id="ref-name" class="input" placeholder="Referral Name">
+                <input id="ref-num" class="input" type="number" placeholder="Referral Number">
+                <button class="btn-main" onclick="submitReferral()">Save Referral</button>
             </div>
 
-            <div class="card" style="margin-top:20px;">
-                <h4 style="margin-bottom:10px; font-size:0.9rem; color:var(--text-sec); text-transform:uppercase;">RULES & GUIDELINES</h4>
-                <div id="comp-desc" class="rules-content">Loading rules...</div>
-                <div id="see-more-trigger" class="see-more-btn" onclick="toggleRules()">See More <i class="fas fa-chevron-down"></i></div>
-            </div>
-
-            <div id="ad-zone-6" class="mobile-ad-container"></div>
-            <div class="section-title"><i class="fas fa-headset" style="color:var(--primary);"></i> Admin Support</div>
-            <div id="ad-zone-7" class="mobile-ad-container"></div>
-            <div id="support-area" class="support-grid"><div class="card" style="text-align:center;">Loading...</div></div>
-            <br><br>
-        </div>
-    </div>
-
-    <!-- === 4. NEW: FULL PAGE SESSION VIEW (SCROLL FIXED) === -->
-    <div id="full-session-view" class="full-page-overlay">
-        <!-- Header stays fixed at top -->
-        <div class="full-page-header">
-            <div style="font-weight:700; font-size:1.1rem;" id="full-sess-title">Session Details</div>
-            <i class="fas fa-times" style="font-size:1.5rem; cursor:pointer;" onclick="closeFullSession()"></i>
-        </div>
-
-        <!-- HTML Container (Scrolls independently) -->
-        <div id="session-html-container" class="html-container">
-            <!-- Iframe renders content, padding is handled in JS inject -->
-            <iframe id="content-frame" class="html-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
-        </div>
-
-        <!-- Button Floating above -->
-        <button id="btn-start-task" class="btn">
-            START TASK <i class="fas fa-arrow-right"></i>
-        </button>
-    </div>
-
-    <!-- === 5. MODALS === -->
-    <div id="personal-msg-modal" class="modal" style="display:none;">
-        <div class="modal-content-box animate-up" style="text-align:center; max-width:350px;">
-            <i class="fas fa-envelope-open-text" style="font-size:3rem; color:var(--primary); margin-bottom:10px;"></i>
-            <h3 class="msg-title" style="margin-bottom:10px;">New Message</h3>
-            <img id="p-msg-img" src="" style="width:100%; border-radius:12px; margin-bottom:15px; display:none;">
-            <div id="p-msg-text" style="text-align:center; color:var(--text-main); font-size:1rem; margin-bottom:20px;"></div>
-            <button class="btn" onclick="closePersonalMsg()" style="background:#333; color:#fff;">OK, Got it</button>
-        </div>
-    </div>
-
-    <div id="info-modal" class="modal">
-        <div class="modal-content-box animate-up">
-            <div class="modal-header">
-                <span class="modal-title" id="info-title">Information</span>
-                <i class="fas fa-times close-btn" onclick="closeInfo()"></i>
-            </div>
-            <div id="info-body">Content goes here...</div>
-        </div>
-    </div>
-
-    <div id="popup-modal" class="modal">
-        <div class="modal-content-box animate-up">
-            <div class="modal-header">
-                <span class="modal-title">Notification</span>
-                <i class="fas fa-times close-btn" onclick="closePopup()"></i>
-            </div>
-            <div id="popup-content" style="text-align:center;">
-                <img id="popup-img" src="" class="hide" style="width:100%; border-radius:12px; margin-bottom:15px;">
-                <p id="popup-desc" style="margin-bottom:15px;">No new updates.</p>
-                <a id="popup-btn" href="#" class="btn" style="display:inline-block; text-decoration:none;">Join Channel</a>
+            <div id="modal-body-task" style="display:none;">
+                <input id="task-name" class="input" placeholder="Task Name (e.g. Daily Check)">
+                <input id="task-date" class="input" type="date">
+                <button class="btn-main" onclick="submitTask()">Save Task</button>
             </div>
         </div>
     </div>
 
-    <div id="settings-modal" class="modal">
-        <div class="modal-content-box animate-up">
-            <div class="modal-header">
-                <span class="modal-title">My Profile</span>
-                <i class="fas fa-times close-btn" onclick="closeSettings()"></i>
-            </div>
-            <div style="text-align:center; margin-bottom:20px;">
-                <img id="set-pic" src="" style="width:90px; height:90px; border-radius:50%; object-fit:cover; border:3px solid var(--primary); margin-bottom:15px;">
-                <div style="display:flex; gap:10px;">
-                    <input id="new-pic-url" class="form-control" placeholder="Image URL" style="margin-bottom:0; padding-left:14px; font-size:0.85rem;">
-                    <button class="btn" style="width:auto; padding:0 20px; margin-top:0;" onclick="updatePic()">Update</button>
-                </div>
-            </div>
-            <div class="credential-box">
-                <h4 style="font-size:0.9rem; margin-bottom:10px; color:var(--text-sec);">My Credentials</h4>
-                <div class="cred-row">
-                    <span>Fworker ID:</span>
-                    <div><span id="profile-phone-display" class="cred-val">***********</span><i class="fas fa-copy cred-icon" onclick="copyCred('phone')"></i></div>
-                </div>
-                <div class="cred-row">
-                    <span>Password:</span>
-                    <div>
-                        <span id="profile-pass-display" class="cred-val">********</span>
-                        <i id="icon-profile-pass" class="fas fa-eye cred-icon" onclick="toggleProfilePass()"></i>
-                        <i class="fas fa-copy cred-icon" onclick="copyCred('pass')"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="card" style="display:flex; justify-content:space-between; align-items:center; margin-top:15px; margin-bottom:5px;">
-                <span style="font-weight:600;"><i class="fas fa-moon"></i> Dark Mode</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="dark-toggle" onchange="toggleTheme(this.checked)">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <button class="btn" style="background: #EF4444; color:white; margin-top:25px;" onclick="logout()">Logout Account</button>
-        </div>
-    </div>
-
-    <div class="bottom-nav">
-        <div class="nav-item active"><i class="fas fa-home"></i> Home</div>
-        <div class="nav-item" onclick="openSettings()"><i class="fas fa-user-cog"></i> Profile</div>
-    </div>
-
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
     <script>
         const firebaseConfig = {
-            apiKey: "AIzaSyB5flOMBRX6b_gAx7nicSDGd6iGV_c5AVU",
-            authDomain: "fworker-shide.firebaseapp.com",
-            databaseURL: "https://fworker-shide-default-rtdb.firebaseio.com",
-            projectId: "fworker-shide",
-            storageBucket: "gs://ludo-vip-9b3da.appspot.com",
-            messagingSenderId: "244655390952",
-            appId: "1:244655390952:web:af4176b78f0c34d73dc95d"
+            apiKey: "AIzaSyCDVbkxmsWXOw-Ug-ktcc3ljexvxpPjYUc",
+            authDomain: "section-one-site.firebaseapp.com",
+            databaseURL: "https://section-one-site-default-rtdb.firebaseio.com",
+            projectId: "section-one-site",
+            storageBucket: "section-one-site.firebasestorage.app",
+            messagingSenderId: "915738687896",
+            appId: "1:915738687896:web:cd3eedcd64e41f401f53ed"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let uid = localStorage.getItem('fw_uid');
-        let userData = {};
-        let popupData = {};
+        let uid = null;
+        let activePlatform = '';
+        let yariType = 'app';
         let configData = {};
-        let currentSessNum = 0;
-        let profileShowPass = false;
-        
-        // Default Ad Code
-        const defaultAdCode = `<script>atOptions={'key':'ec484170bacba8bf4dce215bb57b8e90','format':'iframe','height':50,'width':320,'params':{}};<\\/script><script src="https://www.highperformanceformat.com/ec484170bacba8bf4dce215bb57b8e90/invoke.js"><\\/script>`;
+        let currentUser = null;
+        let genLinkUrl = "https://imgbb.com"; 
 
-        // Init
-        document.addEventListener('DOMContentLoaded', () => {
-            if(uid) {
-                checkStatus();
-            } else {
-                document.getElementById('loading-screen').classList.add('hide');
-                showLogin();
+        const defaultAdCode = `<script>
+            atOptions = {
+                'key' : 'ec484170bacba8bf4dce215bb57b8e90',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        <\/script>
+        <script src="https://www.highperformanceformat.com/ec484170bacba8bf4dce215bb57b8e90/invoke.js"><\/script>`;
+
+        loadTheme();
+        checkAuth();
+
+        function loadTheme() {
+            if(localStorage.getItem('theme')==='dark') {
+                document.body.classList.add('dark-mode');
             }
+        }
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            toggleSettingsMenu(); 
+        }
 
-            // Load Public Config
-            db.ref('config').on('value', s => {
-                const c = s.val() || {};
-                configData = c;
-                
-                // --- LOGO UPDATE LOGIC ---
-                // If admin sets a logo URL, it will update automatically. 
-                // Default is placeholder if null.
-                const logoUrl = c.appLogo || 'https://via.placeholder.com/180x50';
-                
-                const mainLogo = document.getElementById('app-logo-main');
-                const loginLogo = document.getElementById('login-logo-img');
-                const regLogo = document.getElementById('reg-logo-img');
-                
-                if(mainLogo) mainLogo.src = logoUrl;
-                if(loginLogo) loginLogo.src = logoUrl;
-                if(regLogo) regLogo.src = logoUrl;
+        function toggleSettingsMenu() {
+            const menu = document.getElementById('settings-menu');
+            menu.classList.toggle('show');
+        }
 
-                if(c.entryPopup) {
-                    document.getElementById('entry-banner-img').src = c.entryPopup.img || 'https://via.placeholder.com/300x150';
-                    document.getElementById('entry-title').innerText = c.entryPopup.title || 'Welcome';
-                    document.getElementById('entry-desc').innerText = c.entryPopup.desc || '';
-                    document.getElementById('btn-join-tg').href = c.entryPopup.tgLink || '#';
-                    document.getElementById('btn-join-pay').href = c.entryPopup.payLink || '#';
-                }
-                
-                if(c.loginText) document.getElementById('login-desc-text').innerText = c.loginText;
-                if(c.notice) document.getElementById('notice-text').innerText = c.notice;
-                if(c.rules) document.getElementById('comp-desc').innerText = c.rules;
-                if(c.links) {
-                    document.getElementById('lnk-fb').href = c.links.fb || '#';
-                    document.getElementById('lnk-tg').href = c.links.tg || '#';
-                    document.getElementById('lnk-pay').href = c.links.pay || '#';
-                    document.getElementById('lnk-yt').href = c.links.yt || '#';
-                }
-                if(c.sessions) {
-                    document.getElementById('sess1-earn').innerText = c.sessions.session1?.price || 'Earn: --';
-                    document.getElementById('sess2-earn').innerText = c.sessions.session2?.price || 'Earn: --';
-                    document.getElementById('sess3-earn').innerText = c.sessions.session3?.price || 'Earn: --';
-                }
-                if(c.popup) popupData = c.popup;
-                const adSettings = c.adSettings || { master: true };
-                const ads = c.ads || {};
-                if(adSettings.master !== false) {
-                    ['zone1','zone2','zone3','zone4','zone5','zone6','zone7','zone8'].forEach(z => {
-                        if(adSettings[z] !== false) renderAd(`ad-${z}`, ads[z] || defaultAdCode);
-                        else hideAd(`ad-${z}`);
+        function updateNav(el) {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function checkAuth() {
+            const storedUid = localStorage.getItem('fw_uid');
+            if (storedUid) {
+                uid = storedUid;
+                document.getElementById('screen-auth').style.display = 'none';
+                initApp();
+            } else {
+                document.getElementById('screen-auth').style.display = 'flex';
+                document.getElementById('main-app').style.display = 'none';
+                document.querySelectorAll('.status-screen').forEach(el => {
+                    if(el.id !== 'screen-auth') el.style.display = 'none';
+                });
+            }
+        }
+
+        function handleLogin() {
+            const username = document.getElementById('login-user').value.trim();
+            if(!username) return alert("Please enter username!");
+
+            db.ref('users').orderByChild('username').equalTo(username).once('value', snapshot => {
+                if(snapshot.exists()) {
+                    snapshot.forEach(child => {
+                        const userKey = child.key;
+                        const userData = child.val();
+                        localStorage.setItem('fw_uid', userKey);
+                        uid = userKey;
+                        alert("Login Successful! Welcome " + userData.profile.name);
+                        location.reload();
                     });
                 } else {
-                    document.querySelectorAll('.mobile-ad-container').forEach(el => el.style.display = 'none');
+                    alert("Username not found! Please check or create a new account.");
                 }
             });
-        });
+        }
 
-        // Ad Functions
+        function startSignup() {
+            uid = 'u_' + Date.now();
+            localStorage.setItem('fw_uid', uid);
+            document.getElementById('screen-auth').style.display = 'none';
+            initApp();
+        }
+
+        function cancelSignup() {
+            localStorage.removeItem('fw_uid');
+            location.reload();
+        }
+
+        function logout() {
+            if(confirm("Are you sure you want to logout?")) {
+                localStorage.removeItem('fw_uid');
+                location.reload();
+            }
+        }
+
+        function initApp() {
+            document.getElementById('main-app').style.display = 'none';
+            document.querySelectorAll('.status-screen').forEach(el => el.style.display = 'none');
+
+            db.ref(`users/${uid}`).on('value', snapshot => {
+                const user = snapshot.val();
+                if(!user) {
+                    document.getElementById('screen-setup').style.display = 'flex';
+                    db.ref('config/gen_link').once('value', s => { if(s.val()) genLinkUrl = s.val(); });
+                } else if(user.status === 'pending') {
+                    document.getElementById('screen-pending').style.display = 'flex';
+                } else if(user.status === 'blocked') {
+                    document.getElementById('screen-blocked').style.display = 'flex';
+                } else if(user.status === 'deleted') {
+                    document.getElementById('screen-deleted').style.display = 'flex';
+                } else if(user.status === 'active') {
+                    currentUser = user;
+                    document.querySelectorAll('.status-screen').forEach(el => el.style.display = 'none');
+                    document.getElementById('main-app').style.display = 'block';
+                    loadConfig();
+                    loadProfileData(user);
+                    checkRoadmap();
+                }
+            });
+        }
+
+        function submitProfileSetup() {
+            const name = document.getElementById('su-name').value;
+            const gmail = document.getElementById('su-gmail').value;
+            const yari = document.getElementById('su-yari').value;
+            const img = document.getElementById('su-img').value;
+            const wa = document.getElementById('su-wa').value;
+            const acc = document.getElementById('su-acc').value; // New Field
+
+            if(!name || !gmail || !yari || !wa) return alert("Please fill all fields!");
+            if(!img) return alert("Please provide Profile Image Link!");
+
+            const userData = {
+                uid: uid,
+                status: 'pending',
+                profile: {
+                    name: name,
+                    fworkerGmail: gmail,
+                    yariId: yari,
+                    img: img,
+                    whatsapp: wa,
+                    accountNum: acc || "N/A" // Save Account Number
+                },
+                joinedAt: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            db.ref(`users/${uid}`).set(userData).then(() => {
+                alert("Profile Submitted! Wait for Admin Approval.");
+            });
+        }
+
+        function loadConfig() {
+            db.ref('config').on('value', s => {
+                configData = s.val() || {};
+                
+                if(configData.gen_link) genLinkUrl = configData.gen_link;
+
+                if(configData.support) {
+                    document.getElementById('home-btn-wa').href = configData.support.wa || "#";
+                    document.getElementById('home-btn-tg').href = configData.support.tg || "#";
+                    if(configData.support.wa || configData.support.tg) {
+                        document.getElementById('home-support-area').style.display = 'block';
+                    }
+                }
+
+                if(configData.banners && Array.isArray(configData.banners)) {
+                    let html = '';
+                    configData.banners.forEach(u => html += `<div class="slide"><img src="${u}"></div>`);
+                    document.getElementById('slider-wrap').innerHTML = html;
+                    startSlider(configData.banners.length);
+                }
+
+                document.getElementById('marquee-text').innerText = configData.notice || "Welcome to Fworker App";
+                
+                if(configData.app_logo) {
+                    const logoImg = document.getElementById('app-logo');
+                    logoImg.src = configData.app_logo;
+                    logoImg.style.display = 'block';
+                    document.getElementById('def-icon').style.display = 'none';
+                }
+
+                if(configData.roadmap) {
+                    const c = configData.roadmap.contact || {};
+                    document.getElementById('rm-terms').innerText = c.terms || "Follow rules.";
+                    document.getElementById('rm-btn-wa').href = c.wa || "#";
+                    document.getElementById('rm-btn-tg').href = c.tg || "#";
+                    if(configData.roadmap.description) {
+                        document.getElementById('rm-desc-text').innerText = configData.roadmap.description;
+                    }
+                }
+
+                const adStatus = configData.ad_status || 'on';
+                if(adStatus === 'off') {
+                    document.querySelectorAll('.mobile-ad-container').forEach(e => e.style.display = 'none');
+                } else {
+                    document.querySelectorAll('.mobile-ad-container').forEach(e => e.style.display = 'flex');
+                    const ads = configData.ads || {};
+                    renderAd('ad-zone-home-1', ads.home_1 || defaultAdCode);
+                    renderAd('ad-zone-home-2', ads.home_2 || defaultAdCode);
+                    renderAd('ad-zone-work-top', ads.work_top || defaultAdCode);
+                    renderAd('ad-zone-work-mid', ads.work_mid || defaultAdCode);
+                    renderAd('ad-zone-history', ads.history || defaultAdCode);
+                    renderAd('ad-zone-dynamic', ads.dynamic || defaultAdCode);
+                    renderAd('ad-zone-roadmap', ads.roadmap || defaultAdCode);
+                    renderAd('ad-zone-profile', ads.profile || defaultAdCode);
+                }
+            });
+        }
+
         function renderAd(zoneId, adCode) {
             const container = document.getElementById(zoneId);
             if (!container) return;
-            container.style.display = 'flex'; container.innerHTML = ''; 
+            container.innerHTML = '';
             const iframe = document.createElement('iframe');
             iframe.width = "320"; iframe.height = "60"; 
             iframe.style.border = "0"; iframe.style.overflow = "hidden";
             container.appendChild(iframe);
             const doc = iframe.contentWindow.document;
-            doc.open(); doc.write(`<html><body style="margin:0;padding:0;display:flex;justify-content:center;align-items:center;">${adCode}</body></html>`); doc.close();
+            doc.open();
+            doc.write(`<html><body style="margin:0;padding:0;display:flex;justify-content:center;align-items:center;">${adCode}</body></html>`);
+            doc.close();
         }
-        function hideAd(zoneId) { const c = document.getElementById(zoneId); if(c) c.style.display = 'none'; }
 
-        // Auth Logic
-        function userRegister() {
-            const name = document.getElementById('reg-name').value;
-            const fw = document.getElementById('reg-fw').value;
-            const email = document.getElementById('reg-email').value;
-            const pass = document.getElementById('reg-pass').value;
-            const pay = document.getElementById('reg-pay').value;
-            const proof = document.getElementById('reg-proof').value; 
-            if(!name || !email || !pass || !fw || !proof) return alert("Fill all fields including Screenshot Link");
-            const newUid = 'user_' + Date.now();
-            const data = { uid: newUid, name, email, password: pass, fworkerNum: fw, paymentNum: pay, screenshotLink: proof, status: 'pending', joinedAt: firebase.database.ServerValue.TIMESTAMP };
-            db.ref('users/' + newUid).set(data).then(() => { localStorage.setItem('fw_uid', newUid); location.reload(); });
+        function loadProfileData(user) {
+            const p = user.profile || {};
+            document.getElementById('pf-name').value = p.name;
+            document.getElementById('pf-gmail').value = p.fworkerGmail;
+            document.getElementById('pf-wa').value = p.whatsapp;
+            document.getElementById('pf-acc').value = p.accountNum || ''; // Load Acc Num
+            document.getElementById('pf-id').value = p.yariId;
+            document.getElementById('pf-img').value = p.img;
+            document.getElementById('pf-user').value = user.username || "";
         }
-        async function userLogin() {
-            const fwNum = document.getElementById('log-fw').value; 
-            const pass = document.getElementById('log-pass').value;
-            if(!fwNum || !pass) return alert("Enter Fworker Number and Password");
-            const snap = await db.ref('users').orderByChild('fworkerNum').equalTo(fwNum).once('value');
-            let found = false;
-            snap.forEach(c => {
-                const u = c.val();
-                if(u.password === pass) {
-                    found = true;
-                    localStorage.setItem('fw_uid', u.uid);
-                    location.reload(); 
-                }
-            });
-            if(!found) alert("Invalid Credentials");
+
+        let slideIndex = 0;
+        function startSlider(count) {
+            if(window.sliderInterval) clearInterval(window.sliderInterval);
+            if(count <= 1) return;
+            
+            window.sliderInterval = setInterval(() => {
+                slideIndex++; 
+                if(slideIndex >= count) slideIndex = 0;
+                document.getElementById('slider-wrap').style.transform = `translateX(-${slideIndex * 100}%)`;
+            }, 4000);
         }
+
+        function nav(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0, 0);
+            document.getElementById('settings-menu').classList.remove('show');
+            
+            const back = document.getElementById('head-back');
+            
+            if(id === 'p-home') {
+                back.style.display = 'none';
+            } else {
+                back.style.display = 'block';
+            }
+        }
+        function goHome() { nav('p-home'); activePlatform=''; }
+        function openSettings() { nav('p-profile'); }
         
-        function checkStatus() {
-            db.ref('users/' + uid).on('value', s => {
-                const u = s.val();
-                document.getElementById('loading-screen').classList.add('hide'); 
-                
-                if(!u) {
-                    logout(); return; 
-                }
-                userData = u;
-                document.querySelectorAll('.full-screen').forEach(e => e.classList.add('hide'));
-                
-                if(u.status === 'pending') document.getElementById('pending-screen').classList.remove('hide');
-                else if(u.status === 'blocked') { alert("Account Blocked"); logout(); }
-                else if(u.status === 'approved') loadApp();
-            }, error => {
-                document.getElementById('loading-screen').classList.add('hide');
-                showLogin();
-            });
-        }
-
-        function loadApp() {
-            document.getElementById('main-app').classList.remove('hide');
-            document.getElementById('main-app').classList.add('animate-up');
-            document.getElementById('head-name').innerHTML = userData.name + ' <i class="fas fa-check-circle verified"></i>';
-            document.getElementById('head-email').innerHTML = `<i class="fas fa-envelope"></i> ${userData.email}`;
-            document.getElementById('head-phone').innerHTML = `<i class="fas fa-id-card"></i> ${userData.fworkerNum}`;
-            document.getElementById('head-pic').src = userData.profilePic || 'https://via.placeholder.com/100';
-            document.getElementById('set-pic').src = userData.profilePic || 'https://via.placeholder.com/100';
-            document.getElementById('profile-phone-display').innerText = userData.fworkerNum;
-            if(userData.settings && userData.settings.darkMode) {
-                document.body.classList.add('dark-mode');
-                document.getElementById('dark-toggle').checked = true;
-            }
-            loadSupport();
-            checkPersonalMsg();
-            if(!sessionStorage.getItem('popupShown')) {
-                document.getElementById('entry-popup').style.display = 'flex';
-                sessionStorage.setItem('popupShown', 'true');
-            }
-        }
-
-        function toggleProfilePass() {
-            const passEl = document.getElementById('profile-pass-display');
-            const icon = document.getElementById('icon-profile-pass');
-            if(profileShowPass) { passEl.innerText = "********"; icon.className = "fas fa-eye cred-icon"; profileShowPass = false; }
-            else { passEl.innerText = userData.password; icon.className = "fas fa-eye-slash cred-icon"; profileShowPass = true; }
-        }
-        function copyCred(type) {
-            let txt = type === 'phone' ? userData.fworkerNum : userData.password;
-            navigator.clipboard.writeText(txt).then(() => alert(type === 'phone' ? "ID Copied!" : "Password Copied!"));
-        }
-
-        // --- FIXED FULL PAGE SESSION LOGIC ---
-        function openFullPageSession(num) {
-            currentSessNum = num;
-            const overlay = document.getElementById('full-session-view');
-            const btn = document.getElementById('btn-start-task');
-            
-            overlay.style.display = 'flex'; // Changed to flex for proper layout
-            document.getElementById('full-sess-title').innerText = "Session " + num;
-            btn.style.display = 'block';
-
-            injectContent("<h3>Loading Info...</h3>");
-
-            db.ref(`config/sessions/session${num}`).once('value', s => {
-                const d = s.val() || {};
-                const content = d.html_info || d.html || "<h3>No info available.</h3>";
-                injectContent(content);
-            });
-            
-            btn.onclick = () => {
-                btn.style.display = 'none'; 
-                injectContent("<h3>Loading Task... Please wait.</h3>");
-                
-                db.ref(`config/sessions/session${num}`).once('value', s => {
-                    const d = s.val() || {};
-                    if(d.html_task && d.html_task.length > 10) {
-                        injectContent(d.html_task);
-                    } else if(d.link) {
-                        const frame = document.getElementById('content-frame');
-                        frame.removeAttribute('srcdoc'); 
-                        frame.src = d.link; 
-                    } else {
-                        injectContent("<h3>Task content not set by admin.</h3>");
-                    }
-                });
+        function saveProfile() {
+            const d = {
+                name: document.getElementById('pf-name').value,
+                fworkerGmail: document.getElementById('pf-gmail').value,
+                whatsapp: document.getElementById('pf-wa').value,
+                accountNum: document.getElementById('pf-acc').value, // Update Acc Num
+                yariId: document.getElementById('pf-id').value,
+                img: document.getElementById('pf-img').value
             };
+            const newUsername = document.getElementById('pf-user').value;
+
+            // Update Profile Fields
+            db.ref(`users/${uid}/profile`).update(d);
+            
+            // Update Username (Root level)
+            if(newUsername) {
+                db.ref(`users/${uid}`).update({ username: newUsername });
+            }
+
+            alert("Profile & Username Updated Successfully!");
         }
 
-        function injectContent(html) {
-            const frame = document.getElementById('content-frame');
-            // Adding extra padding bottom to body so button doesn't cover content
-            // Also enabling scroll inside iframe body
-            frame.srcdoc = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <style>
-                        body { 
-                            font-family: 'Poppins', sans-serif; 
-                            margin: 0; 
-                            padding: 15px; 
-                            padding-bottom: 90px; /* Extra padding for floating button */
-                            overflow-y: auto;
-                        }
-                        img { max-width: 100%; height: auto; border-radius: 8px; }
-                    </style>
-                </head>
-                <body>${html}</body>
-                </html>
-            `;
+        function openService(pf) {
+            activePlatform = pf;
+            nav('p-work');
+            document.getElementById('service-title').innerText = pf.toUpperCase() + " SERVICE";
+            document.getElementById('hist-title-plat').innerText = pf.toUpperCase(); // Update history title
+            
+            const payInfo = (configData.pay_info && configData.pay_info[pf]) ? configData.pay_info[pf] : {desc:'No Info', addr:'N/A'};
+            document.getElementById('dyn-pay-desc').innerText = payInfo.desc;
+            document.getElementById('dyn-pay-addr').innerText = payInfo.addr; 
+
+            document.getElementById('form-yari').style.display = 'none';
+            document.getElementById('form-gen').style.display = 'none';
+
+            document.getElementById('yari-amt').value = '';
+            document.getElementById('gen-amt').value = '';
+            document.getElementById('yari-ss').value = '';
+            document.getElementById('gen-ss').value = '';
+            document.getElementById('yari-price').innerText = '';
+            document.getElementById('gen-price').innerText = '';
+
+            const limits = configData.limits || {};
+
+            if(pf === 'yari') {
+                document.getElementById('form-yari').style.display = 'block';
+                setYariType('app');
+                document.getElementById('yari-limit-msg').innerText = `Limit: ${limits.yariMin || 0} - ${limits.yariMax || 'Unl'}`;
+            } else {
+                document.getElementById('form-gen').style.display = 'block';
+                const min = (pf==='tiktok')?limits.tiktokMin:limits.smMin;
+                const max = (pf==='tiktok')?limits.tiktokMax:limits.smMax;
+                document.getElementById('gen-limit-msg').innerText = `Limit: ${min||0} - ${max||'Unl'}`;
+            }
+            loadHistory();
         }
 
-        function closeFullSession() { 
-            document.getElementById('full-session-view').style.display = 'none'; 
-            document.getElementById('content-frame').srcdoc = "";
-            document.getElementById('content-frame').src = "";
+        function openGenLink() {
+            window.open(genLinkUrl, '_blank'); 
         }
-        
-        function closeEntryPopup() { document.getElementById('entry-popup').style.display = 'none'; }
-        function showLogin(){ document.getElementById('login-screen').classList.remove('hide'); document.getElementById('register-screen').classList.add('hide'); }
-        function showRegister(){ document.getElementById('login-screen').classList.add('hide'); document.getElementById('register-screen').classList.remove('hide'); }
-        function createLink() { window.open(configData.imgHostLink || "https://imgbb.com", '_blank'); }
-        function logout() { localStorage.removeItem('fw_uid'); location.reload(); }
-        function toggleRules() {
-            const content = document.getElementById('comp-desc');
-            const btn = document.getElementById('see-more-trigger');
-            content.classList.toggle('expanded');
-            btn.innerHTML = content.classList.contains('expanded') ? 'See Less <i class="fas fa-chevron-up"></i>' : 'See More <i class="fas fa-chevron-down"></i>';
+
+        function setYariType(t) {
+            yariType = t;
+            const btnApp = document.getElementById('btn-y-app');
+            const btnSub = document.getElementById('btn-y-sub');
+            const ssGrp = document.getElementById('yari-ss-grp');
+            
+            if(t==='app') {
+                btnApp.style.background='var(--primary)'; btnSub.style.background='#ddd';
+                ssGrp.style.display = 'none'; 
+            } else {
+                btnSub.style.background='var(--primary)'; btnApp.style.background='#ddd';
+                ssGrp.style.display = 'block';
+            }
         }
-        function loadSupport() {
-            db.ref('config/support').on('value', s => {
-                const d = s.val(); if(!d) return;
-                let html = '';
-                ['admin1', 'admin2'].forEach(k => {
-                    const adm = d[k];
-                    if(adm && adm.name) {
-                        html += `<div class="admin-card"><img src="${adm.pic}" class="admin-pic"><div class="admin-name">${adm.name}</div><div class="contact-btns"><a href="${adm.wa}" class="c-btn btn-wa"><i class="fab fa-whatsapp"></i></a><a href="${adm.tg}" class="c-btn btn-tg"><i class="fab fa-telegram-plane"></i></a></div></div>`;
-                    }
-                });
-                document.getElementById('support-area').innerHTML = html || '<p>Offline</p>';
+
+        function copyAddr() {
+            const txt = document.getElementById('dyn-pay-addr').innerText;
+            navigator.clipboard.writeText(txt);
+            alert("Copied: " + txt);
+        }
+
+        document.getElementById('yari-amt').addEventListener('input', function() {
+            const val = parseFloat(this.value);
+            const rate = (configData.rates && configData.rates.s1) ? configData.rates.s1.yari : 0;
+            if(!val) return document.getElementById('yari-price').innerText = "";
+            const p = (val/100000)*rate;
+            document.getElementById('yari-price').innerText = `Price: ${p.toFixed(2)} Tk`;
+        });
+        document.getElementById('gen-amt').addEventListener('input', function() {
+            const val = parseFloat(this.value);
+            const rates = (configData.rates && configData.rates.s1) ? configData.rates.s1 : {};
+            const r = (activePlatform==='tiktok')?rates.tiktok:rates.sm;
+            if(!val) return document.getElementById('gen-price').innerText = "";
+            const p = (val/1000)*r;
+            document.getElementById('gen-price').innerText = `Price: ${p.toFixed(2)} Tk`;
+        });
+
+        function submitCoin(formType) {
+            const isYari = (formType==='yari');
+            const amtInp = document.getElementById(isYari?'yari-amt':'gen-amt');
+            const ssInp = document.getElementById(isYari?'yari-ss':'gen-ss');
+            const amt = parseFloat(amtInp.value);
+            const ss = ssInp.value.trim();
+
+            if(!amt) return alert("Enter Amount");
+            
+            if(isYari && yariType === 'app') {
+            } else {
+                if(!ss) return alert("অবশ্যই ইমেজ লিংক/স্ক্রিনশট লিংক দিতে হবে!");
+            }
+
+            const rates = (configData.rates && configData.rates.s1) ? configData.rates.s1 : {};
+            let price = 0;
+            if(isYari) price = (amt/100000)*(rates.yari||0);
+            else price = (amt/1000)*((activePlatform==='tiktok'?rates.tiktok:rates.sm)||0);
+
+            // Here current user profile already contains accountNum if saved
+            const d = {
+                uid: uid,
+                session: 1,
+                platform: activePlatform,
+                type: isYari?yariType:'sub',
+                amount: amt,
+                price: price.toFixed(2),
+                ss: ss||'',
+                status: 'pending',
+                username: currentUser.username || 'User',
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                profile: currentUser.profile 
+            };
+            
+            db.ref('requests').push(d).then(()=>{
+                alert("Request Submitted Successfully!");
+                amtInp.value=''; ssInp.value='';
+                setTimeout(loadHistory, 500);
             });
         }
-        function checkPersonalMsg() {
-            db.ref('users/' + uid + '/inbox_msg').on('value', s => {
-                const msg = s.val();
-                if(msg) {
-                    document.getElementById('p-msg-text').innerHTML = msg.text;
-                    document.getElementById('personal-msg-modal').style.display = 'flex';
-                    if(msg.img) { document.getElementById('p-msg-img').src = msg.img; document.getElementById('p-msg-img').style.display = 'block'; }
+
+        function loadHistory() {
+            const div = document.getElementById('history-list');
+            div.innerHTML = '<div style="text-align:center; padding:10px;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
+            
+            if(!uid) return;
+
+            db.ref('requests').once('value', s => {
+                const arr = [];
+                s.forEach(c => {
+                    const val = c.val();
+                    if (val.uid === uid && val.platform.toLowerCase() === activePlatform.toLowerCase()) {
+                        arr.push({ key: c.key, ...val });
+                    }
+                });
+                
+                const filtered = arr.sort((a,b) => b.timestamp - a.timestamp);
+                
+                if(filtered.length === 0) {
+                    div.innerHTML = '<p style="text-align:center; font-size:0.85rem; color:#777;">কোনো লেনদেনের তথ্য পাওয়া যায়নি।</p>';
+                    return;
+                }
+
+                let html = '';
+                filtered.forEach(d => {
+                    const date = new Date(d.timestamp).toLocaleDateString() + ' ' + new Date(d.timestamp).toLocaleTimeString();
+                    let typeTxt = '';
+                    
+                    let pfName = d.platform ? d.platform.toUpperCase() : 'UNKNOWN';
+                    
+                    if(d.platform === 'yari') {
+                         typeTxt = (d.type==='app') ? '(আবেদন)' : '(জমা)';
+                    } else {
+                         typeTxt = '(Sell)';
+                    }
+                    
+                    let reasonHtml = '';
+                    if(d.status === 'rejected' && d.reason) {
+                        reasonHtml = `<div class="reason-box"><i class="fas fa-info-circle"></i> <b>Reason:</b> ${d.reason}</div>`;
+                    }
+                    
+                    // FIXED: DELETE BUTTON FUNCTIONALITY
+                    let delBtn = '';
+                    if(d.platform === 'yari' && d.type === 'app' && d.status === 'pending') {
+                        delBtn = `<button class="btn-del-req" onclick="deleteReq('${d.key}')">Delete</button>`;
+                    }
+
+                    html += `
+                    <div class="hist-item st-${d.status}">
+                        <div style="width:100%">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span><b style="color:var(--primary-dark)">${pfName}</b>: <b>${d.amount}</b> ${typeTxt}</span>
+                                <div>
+                                    <span style="font-weight:bold; text-transform:uppercase; font-size:0.8rem;">${d.status}</span>
+                                    ${delBtn}
+                                </div>
+                            </div>
+                            <small style="color:#666;">${date} • Price: ${d.price} Tk</small>
+                            ${reasonHtml}
+                        </div>
+                    </div>`;
+                });
+                div.innerHTML = html;
+            });
+        }
+
+        // FIXED: DELETE FUNCTION
+        function deleteReq(key) {
+            if(confirm("আপনি কি এই আবেদনটি ডিলিট করতে চান? ডিলিট করলে এটি এডমিন থেকেও মুছে যাবে।")) {
+                db.ref(`requests/${key}`).remove().then(() => {
+                    alert("আবেদন ডিলিট করা হয়েছে। আপনি পুনরায় আবেদন করতে পারেন।");
+                    loadHistory();
+                });
+            }
+        }
+
+        function showModal(type) {
+            document.getElementById('input-modal').style.display = 'flex';
+            if(type === 'ref') {
+                document.getElementById('modal-title').innerText = 'Add Referral';
+                document.getElementById('modal-body-ref').style.display = 'block';
+                document.getElementById('modal-body-task').style.display = 'none';
+            } else {
+                document.getElementById('modal-title').innerText = 'Add Daily Task';
+                document.getElementById('modal-body-ref').style.display = 'none';
+                document.getElementById('modal-body-task').style.display = 'block';
+            }
+        }
+        function closeModal() {
+            document.getElementById('input-modal').style.display = 'none';
+        }
+
+        function submitReferral() {
+            const n = document.getElementById('ref-name').value;
+            const num = document.getElementById('ref-num').value;
+            if(!n || !num) return alert("Fill all fields");
+            db.ref(`users/${uid}/referrals`).push({ name:n, num:num }).then(()=>{
+                alert("Referral Added Successfully");
+                document.getElementById('ref-name').value='';
+                document.getElementById('ref-num').value='';
+                closeModal();
+            });
+        }
+
+        function submitTask() {
+            const n = document.getElementById('task-name').value;
+            const d = document.getElementById('task-date').value;
+            if(!n || !d) return alert("Fill all fields");
+            db.ref(`users/${uid}/tasks`).push({ name:n, date:d }).then(()=>{
+                alert("Task Added Successfully");
+                document.getElementById('task-name').value='';
+                closeModal();
+            });
+        }
+
+        function openDynamicPage(key, title) {
+            nav('p-dynamic');
+            document.getElementById('dyn-title').innerHTML = `<i class="fas fa-book-open"></i> ${title}`;
+            document.getElementById('dyn-content').innerHTML = '<div style="text-align:center; padding:20px;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
+            
+            db.ref(`config/pages/${key}`).once('value', s => {
+                const content = s.val();
+                if(content) {
+                    document.getElementById('dyn-content').innerHTML = content;
+                } else {
+                    document.getElementById('dyn-content').innerHTML = '<p style="text-align:center;">No content available yet. Please contact admin.</p>';
                 }
             });
         }
-        function closePersonalMsg() { db.ref('users/' + uid + '/inbox_msg').remove(); document.getElementById('personal-msg-modal').style.display = 'none'; }
-        function showInfo(t) {
-            document.getElementById('info-modal').style.display = 'flex';
-            let txt = t==='privacy'?configData.privacyPolicy:t==='about'?configData.aboutUs:configData.rules;
-            document.getElementById('info-body').innerText = txt || "Loading...";
-            document.getElementById('info-title').innerText = t.toUpperCase();
+
+        function openRoadmap() {
+            nav('p-roadmap');
+            checkRoadmap();
         }
-        function closeInfo(){ document.getElementById('info-modal').style.display = 'none'; }
-        function showPopup() {
-            document.getElementById('popup-modal').style.display = 'flex';
-            document.getElementById('popup-desc').innerText = popupData.desc || "No new updates.";
-            document.getElementById('popup-btn').href = popupData.link || "#";
+
+        function checkRoadmap() {
+            const targets = (configData.roadmap && configData.roadmap.targets) ? configData.roadmap.targets : {yari:1,tiktok:1,sm:1,ref:1,task:1};
+
+            db.ref('requests').orderByChild('uid').equalTo(uid).once('value', s => {
+                let yari=0, tik=0, sm=0;
+                s.forEach(c => {
+                    const v = c.val();
+                    if(v.status === 'approved') {
+                        if(v.platform === 'yari') yari++;
+                        if(v.platform === 'tiktok') tik++;
+                        if(v.platform === 'sm') sm++;
+                    }
+                });
+
+                db.ref(`users/${uid}`).once('value', uSnap => {
+                    const uVal = uSnap.val() || {};
+                    const refs = uVal.referrals ? Object.keys(uVal.referrals).length : 0;
+                    const tasks = uVal.tasks ? Object.keys(uVal.tasks).length : 0;
+
+                    updateBadge('rm-yari', yari, targets.yari);
+                    updateBadge('rm-tiktok', tik, targets.tiktok);
+                    updateBadge('rm-sm', sm, targets.sm);
+                    updateBadge('rm-ref', refs, targets.ref);
+                    updateBadge('rm-task', tasks, targets.task);
+
+                    if(yari >= (targets.yari||1) && 
+                       tik >= (targets.tiktok||1) && 
+                       sm >= (targets.sm||1) && 
+                       refs >= (targets.ref||1) && 
+                       tasks >= (targets.task||1)) {
+                        document.getElementById('session2-area').style.display = 'block';
+                    } else {
+                        document.getElementById('session2-area').style.display = 'none';
+                    }
+                });
+            });
         }
-        function closePopup() { document.getElementById('popup-modal').style.display = 'none'; }
-        function openSettings() { document.getElementById('settings-modal').style.display = 'flex'; }
-        function closeSettings() { document.getElementById('settings-modal').style.display = 'none'; }
-        function updatePic() { const u = document.getElementById('new-pic-url').value; if(u) db.ref(`users/${uid}/profilePic`).set(u).then(()=>alert("Updated")); }
-        function toggleTheme(d) { document.body.classList.toggle('dark-mode', d); db.ref(`users/${uid}/settings/darkMode`).set(d); }
+
+        function updateBadge(elId, current, target) {
+            const el = document.getElementById(elId);
+            const tg = target || 1;
+            const pct = Math.min(100, Math.round((current / tg) * 100));
+            
+            el.innerHTML = `${current}/${tg} <small>(${pct}%)</small>`;
+            
+            if(current >= tg) {
+                el.className = 'badge done';
+                el.innerHTML = '<i class="fas fa-check"></i> Done';
+            } else {
+                el.className = 'badge';
+            }
+        }
+
+        function applySession2() {
+            const wa = document.getElementById('s2-wa-inp').value;
+            const tg = document.getElementById('s2-tg-inp').value;
+
+            if(!wa || !tg) return alert("Please enter your WhatsApp and Telegram Username.");
+
+            const reqData = {
+                uid: uid,
+                username: currentUser.username,
+                profile: currentUser.profile,
+                whatsapp: wa,
+                telegram: tg,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                status: 'pending'
+            };
+
+            db.ref('session2_requests').push(reqData).then(() => {
+                alert("আপনার আবেদন এডমিনের কাছে পাঠানো হয়েছে! শীঘ্রই যোগাযোগ করা হবে।");
+                document.getElementById('s2-wa-inp').value = '';
+                document.getElementById('s2-tg-inp').value = '';
+            });
+        }
+
     </script>
 </body>
 </html>
-<!-- --- END OF FILE User_Panel_Final_Pro.html --- -->
